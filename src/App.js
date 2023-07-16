@@ -10,7 +10,7 @@ function App() {
     const fetchData = async () => {
       const today = new Date();
 const yesterday = new Date(today);
-yesterday.setDate(yesterday.getDate() - 1);
+yesterday.setDate(yesterday.getDate() - 2);
 const dd = String(yesterday.getDate()).padStart(2, '0');
 const mm = String(yesterday.getMonth() + 1).padStart(2, '0'); // January is 0
 const yyyy = yesterday.getFullYear();
@@ -42,7 +42,14 @@ const yyyy = yesterday.getFullYear();
   console.log(data);
   return (
     <MDBContainer fluid>
-     <h1>Hi welcome</h1>
+    {data.map((item)=>{
+      return <div className="main">
+      <h1>{item.title}</h1>
+      {
+        item.urlToImage && <img src={item.urlToImage} alt="" srcset="" />
+      }
+      </div>
+    })}
     </MDBContainer>
   );
 }
