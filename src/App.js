@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { MDBBtn, MDBContainer } from 'mdb-react-ui-kit';
+import './app.css'
 
 
 function App() {
-  const [data, setData] = useState([]);
+
+  const [newsArticle, setNewsArticle] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       const today = new Date();
-const yesterday = new Date(today);
-yesterday.setDate(yesterday.getDate() - 2);
-const dd = String(yesterday.getDate()).padStart(2, '0');
-const mm = String(yesterday.getMonth() + 1).padStart(2, '0'); // January is 0
-const yyyy = yesterday.getFullYear();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 2);
+      const dd = String(yesterday.getDate()).padStart(2, '0');
+      const mm = String(yesterday.getMonth() + 1).padStart(2, '0'); // January is 0
+      const yyyy = yesterday.getFullYear();
 
       try {
         const response = await axios.get(
@@ -27,9 +29,12 @@ const yyyy = yesterday.getFullYear();
             },
           }
         );
-  
-        setData(response.data.articles);
-       
+        const articles = response.data.articles.map((article, index) => ({
+          id: index,
+          title: article.title,
+          image: article.urlToImage,
+        }));
+        setNewsArticle(articles)
       } catch (error) {
         console.log('Error fetching data:', error);
       }
@@ -37,19 +42,17 @@ const yyyy = yesterday.getFullYear();
 
     fetchData();
   }, []);
-
-
-  console.log(data);
+  console.log(newsArticle);
   return (
     <MDBContainer fluid>
-    {data.map((item)=>{
-      return <div className="main">
-      <h1>{item.title}</h1>
-      {
-        item.urlToImage && <img src={item.urlToImage} alt="" srcset="" />
-      }
-      </div>
-    })}
+      {newsArticle.map((item) => {
+        return <div className="main">
+          <h1>{item.title}</h1>
+          {
+            item.image && <img src={item.image} alt="" srcset="" />
+          }
+        </div>
+      })}
     </MDBContainer>
   );
 }
