@@ -8,19 +8,26 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
+      const today = new Date();
+const yesterday = new Date(today);
+yesterday.setDate(yesterday.getDate() - 1);
+const dd = String(yesterday.getDate()).padStart(2, '0');
+const mm = String(yesterday.getMonth() + 1).padStart(2, '0'); // January is 0
+const yyyy = yesterday.getFullYear();
+
       try {
         const response = await axios.get(
           'https://newsapi.org/v2/everything',
           {
             params: {
               q: 'Apple',
-              from: '2023-07-15',
+              from: `${yyyy}-${mm}-${dd}`,
               sortBy: 'popularity',
               apiKey: '0930482b49af437883bb6328392b8e46',
             },
           }
         );
-        console.log(response)
+  
         setData(response.data.articles);
        
       } catch (error) {
